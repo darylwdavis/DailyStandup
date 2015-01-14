@@ -1,0 +1,4 @@
+c:\users\daryl\documents\visual studio 2010\Projects\DWD_DailyStandup\DWD_DailyStandup\bin\DWD_DailyStandup.dll
+c:\users\daryl\documents\visual studio 2010\Projects\DWD_DailyStandup\DWD_DailyStandup\bin\DWD_DailyStandup.pdb
+c:\users\daryl\documents\visual studio 2010\Projects\DWD_DailyStandup\DWD_DailyStandup\obj\Debug\DWD_DailyStandup.dll
+c:\users\daryl\documents\visual studio 2010\Projects\DWD_DailyStandup\DWD_DailyStandup\obj\Debug\DWD_DailyStandup.pdb
