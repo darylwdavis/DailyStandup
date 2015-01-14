@@ -32,7 +32,7 @@
                         <td class="style2">
                             <asp:Label ID="Label1" runat="server" 
                                 style="text-align: left; color: #003300; font-size: xx-large" 
-                                Text="The Daily Standup"></asp:Label>
+                                Text="The Daily Standup" Font-Names="Times New Roman"></asp:Label>
                         </td>
                         <td>
                             &nbsp;</td>
