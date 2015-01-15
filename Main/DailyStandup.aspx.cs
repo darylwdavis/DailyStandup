@@ -51,41 +51,37 @@ namespace DWD_DailyStandup.Main
 
     private void AddNewStandUp()
     {
-      //Create the Table that will Be displayed and Add Columns
-      DataTable dt = new DataTable();
-      dt.Columns.Add("Date");
-      dt.Columns.Add("Yesterday");
-      dt.Columns.Add("Today");
-      dt.Columns.Add("Impediments");
-      dt.Columns.Add("Project");
 
-      DataRow datarow = dt.NewRow();
-      datarow["Date"] = Calendar1.SelectedDate;
-      datarow["Yesterday"] = txtYesterday.Text;
-      datarow["Today"] = txtToday.Text;
-      datarow["Impediments"] = txtImpediments.Text;
+      try
+      {
+        //Calls the insert Stored Procedure
 
+        // Setup Connection
+        String connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            SqlConnection connection = new SqlConnection(connectionString);
+        //Setu Command
+        SqlCommand command = new SqlCommand("dbo.pspInsNewStandup", connection);
+        command.CommandType = CommandType.StoredProcedure;
 
-      //Add Row to Table 
-      dt.Rows.Add(datarow);
+        // Add the parameters to Pass into SP
+        command.Parameters.AddWithValue("@Date", Calendar1.SelectedDate);
+        command.Parameters.AddWithValue("@Yesterday", txtYesterday.Text);
+        command.Parameters.AddWithValue("@Today", txtToday.Text);
+        command.Parameters.AddWithValue("@Impediments", txtImpediments.Text);
+        command.Parameters.AddWithValue("@ProjectName", ddlProjects.Text);
 
-      String connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-      // Connect to the database and run the query.
-      SqlConnection connection = new SqlConnection(connectionString);
-      SqlDataAdapter da = new SqlDataAdapter();
+        // Connect to the database and run the Insert.
+        using (connection)
+        {
+          connection.Open();
+          command.ExecuteNonQuery();
+        }
+      }
+      catch (Exception ex)
+      {
 
-      SqlCommand command = new SqlCommand("dbo.pspInsNewStandup", connection);
-      command.CommandType = CommandType.StoredProcedure;
-
-      // Add the parameters for the InsertCommand.
-      command.Parameters.AddWithValue("@Date", Calendar1.SelectedDate);
-      command.Parameters.AddWithValue("@Yesterday", txtYesterday.Text);
-      command.Parameters.AddWithValue("@Today", txtToday.Text);
-      command.Parameters.AddWithValue("@Impediments", txtImpediments.Text);
-      command.Parameters.AddWithValue("@ProjectName", ddlProjects.Text);
-
-      da.InsertCommand = command;
-
+        Response.Write(ex);
+      }
     }
 
 
