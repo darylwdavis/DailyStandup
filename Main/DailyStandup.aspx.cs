@@ -25,6 +25,7 @@ namespace DWD_DailyStandup.Main
       if (!IsPostBack)
       {
         Calendar1.SelectedDate = DateTime.Now;
+        lblDate.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
         fillGridview(Calendar1.SelectedDate);
       }
 
@@ -32,6 +33,8 @@ namespace DWD_DailyStandup.Main
 
     protected void Calendar1_SelectionChanged(object sender, EventArgs e)
     {
+      //Update Date Label
+      lblDate.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
       //Update the Standup Page
       fillGridview(Calendar1.SelectedDate);
 
@@ -40,11 +43,50 @@ namespace DWD_DailyStandup.Main
     protected void btnAdd_Click(object sender, EventArgs e)
     {
 
+      AddNewStandUp();
     }
 
 
     #endregion    //--------------------------------------------------------------------
 
+    private void AddNewStandUp()
+    {
+      //Create the Table that will Be displayed and Add Columns
+      DataTable dt = new DataTable();
+      dt.Columns.Add("Date");
+      dt.Columns.Add("Yesterday");
+      dt.Columns.Add("Today");
+      dt.Columns.Add("Impediments");
+      dt.Columns.Add("Project");
+
+      DataRow datarow = dt.NewRow();
+      datarow["Date"] = Calendar1.SelectedDate;
+      datarow["Yesterday"] = txtYesterday.Text;
+      datarow["Today"] = txtToday.Text;
+      datarow["Impediments"] = txtImpediments.Text;
+
+
+      //Add Row to Table 
+      dt.Rows.Add(datarow);
+
+      String connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+      // Connect to the database and run the query.
+      SqlConnection connection = new SqlConnection(connectionString);
+      SqlDataAdapter da = new SqlDataAdapter();
+
+      SqlCommand command = new SqlCommand("dbo.pspInsNewStandup", connection);
+      command.CommandType = CommandType.StoredProcedure;
+
+      // Add the parameters for the InsertCommand.
+      command.Parameters.AddWithValue("@Date", Calendar1.SelectedDate);
+      command.Parameters.AddWithValue("@Yesterday", txtYesterday.Text);
+      command.Parameters.AddWithValue("@Today", txtToday.Text);
+      command.Parameters.AddWithValue("@Impediments", txtImpediments.Text);
+      command.Parameters.AddWithValue("@ProjectName", ddlProjects.Text);
+
+      da.InsertCommand = command;
+
+    }
 
 
     private void fillGridview(DateTime StartingDateDayOfWeek)

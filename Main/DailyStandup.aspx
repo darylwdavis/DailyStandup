@@ -3,7 +3,7 @@
     <style type="text/css">
     .style4
     {
-        width: 205px;
+        width: 192px;
     }
         .style5
         {
@@ -37,19 +37,68 @@
         }
         .style14
         {
-            width: 205px;
+            width: 192px;
             height: 174px;
         }
         .style15
         {
             height: 174px;
         }
-    </style>
+        .style16
+        {
+            width: 192px;
+            height: 17px;
+        }
+        .style17
+        {
+            height: 17px;
+        }
+        .style18
+        {
+            width: 130px;
+        }
+        .style19
+        {
+            width: 270px;
+        }
+        .style20
+        {
+            width: 135px;
+        }
+        </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <table class="style1">
     <tr>
+        <td class="style16">
+            <table class="style1">
+                <tr>
+                    <td class="style18">
+                        &nbsp;</td>
+                    <td>
+                        <asp:Button ID="btnProject" runat="server" style="text-align: right" 
+                            Text="Project" />
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="style17">
+            <asp:SqlDataSource ID="sdsProjects" runat="server" 
+                ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
+                SelectCommand="SELECT [Project] FROM [tblProjects]"></asp:SqlDataSource>
+            <asp:DropDownList ID="ddlProjects" runat="server" DataSourceID="sdsProjects" 
+                DataTextField="Project" DataValueField="Project">
+            </asp:DropDownList>
+        </td>
+    </tr>
+    <tr>
         <td class="style14">
+            <table class="style1">
+                <tr>
+                    <td>
+                        &nbsp;</td>
+                </tr>
+            </table>
             <asp:Calendar ID="Calendar1" runat="server" 
                 onselectionchanged="Calendar1_SelectionChanged" BackColor="White" 
                 BorderColor="#999999" Font-Names="Verdana" Font-Size="8pt" 
@@ -68,26 +117,53 @@
             </asp:Calendar>
         </td>
         <td class="style15">
-            <table class="style1" style="height: 55px; width: 99%">
+            <table class="style1" style="height: 55px; width: 100%">
                 <tr>
                     <td class="style8">
+                        <table class="style1" style="width: 117%">
+                            <tr>
+                                <td class="style20">
                         <strong>What I did Yesterday</strong></td>
+                                <td>
+                                    &nbsp;</td>
+                            </tr>
+                        </table>
+                    </td>
                     <td class="style11">
+                        <table class="style1" style="width: 120%">
+                            <tr>
+                                <td class="style20">
                         <strong>What I will do Today</strong></td>
+                                <td>
+                        <strong>
+                                    <asp:Label ID="lblDate" runat="server" Text="yyyy-mm-dd"></asp:Label>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                     <td class="style12">
+                        <table class="style1" style="width: 117%">
+                            <tr>
+                                <td class="style20">
                         <strong>What Impedes me</strong></td>
+                                <td>
+                                    &nbsp;</td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
                     <td class="style7">
-                        <asp:TextBox ID="txtYesterday" runat="server" Height="167px" 
+                        <asp:TextBox ID="txtYesterday" runat="server" Height="170px" 
                             TextMode="MultiLine" Width="200px" Font-Names="Tahoma">Yesterday I </asp:TextBox>
                     </td>
                     <td class="style5">
-                        <asp:TextBox ID="txtToday" runat="server" Height="164px" TextMode="MultiLine" 
+                        <asp:TextBox ID="txtToday" runat="server" Height="170px" TextMode="MultiLine" 
                             Width="200px" Font-Names="Tahoma">Today I </asp:TextBox>
                     </td>
                     <td class="style13">
-                        <asp:TextBox ID="txtImpediments" runat="server" Height="166px" 
+                        <asp:TextBox ID="txtImpediments" runat="server" Height="170px" 
                             TextMode="MultiLine" Width="200px" Font-Names="Tahoma">I&#39;m impeded by </asp:TextBox>
                     </td>
                 </tr>
@@ -98,8 +174,18 @@
         <td class="style4">
             &nbsp;</td>
         <td>
-            <asp:Button ID="btnAdd" runat="server" onclick="btnAdd_Click" 
-                Text="Add Your Stand-up" />
+            <table class="style1">
+                <tr>
+                    <td class="style19">
+                        &nbsp;</td>
+                    <td>
+                        <asp:Button ID="btnAdd" runat="server" onclick="btnAdd_Click" 
+                            Text="Add Your Stand-up" />
+                    </td>
+                    <td>
+                        &nbsp;</td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
