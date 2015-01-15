@@ -37,6 +37,9 @@ namespace DWD_DailyStandup.Main
         lblDate.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
         //Fill the Text Boxes
         UpdateTextBoxes(Calendar1.SelectedDate);
+
+        //Set the New Project MultiView to default view
+        MultiView1.ActiveViewIndex = 0;
       }
 
     }
@@ -204,6 +207,18 @@ namespace DWD_DailyStandup.Main
 
     protected void btnAddProject_Click(object sender, EventArgs e)
     {
+      //Add Project Mode
+      MultiView1.ActiveViewIndex = 1;
+
+    }
+
+    protected void btnAddProject_Click1(object sender, EventArgs e)
+    {
+      //Add project to db
+      
+
+      //Return to Normal Mode
+      MultiView1.ActiveViewIndex = 0;
 
     }
 

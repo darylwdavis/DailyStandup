@@ -1,10 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DailyStandup.aspx.cs" Inherits="DWD_DailyStandup.Main.DailyStandup" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
     <style type="text/css">
-    .style4
-    {
-        width: 192px;
-    }
         .style5
         {
             height: 138px;
@@ -57,13 +53,25 @@
         {
             width: 130px;
         }
-        .style19
-        {
-            width: 270px;
-        }
         .style20
         {
             width: 135px;
+        }
+        .style26
+        {
+            height: 78px;
+        }
+        .style31
+        {
+            width: 115px;
+        }
+        .style32
+        {
+            width: 57px;
+        }
+        .style33
+        {
+            height: 21px;
         }
         </style>
 </asp:Content>
@@ -74,22 +82,27 @@
             <table class="style1">
                 <tr>
                     <td class="style18">
-                        &nbsp;</td>
-                    <td>
-                        <asp:Button ID="btnAddProject" runat="server" style="text-align: right" 
-                            Text="Add Project" onclick="btnAddProject_Click" />
+            <asp:SqlDataSource ID="sdsProjects" runat="server" 
+                ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
+                SelectCommand="SELECT [Project], [ProjectID] FROM [tblProjects]" 
+                            onselecting="sdsProjects_Selecting"></asp:SqlDataSource>
                     </td>
+                    <td>
+                        &nbsp;</td>
                 </tr>
             </table>
         </td>
         <td class="style17">
+            &nbsp;<asp:Label ID="lblProjectDesc" runat="server" Font-Size="Large" 
+                Text="Project"></asp:Label>
+&nbsp;
             <asp:DropDownList ID="ddlProjects" runat="server" DataSourceID="sdsProjects" 
                 DataTextField="Project" DataValueField="ProjectID" AutoPostBack="True" 
                 onselectedindexchanged="ddlProjects_SelectedIndexChanged" Height="30px" 
                 Width="451px">
                 <asp:ListItem Text="-Select-" Value="" /> 
             </asp:DropDownList>
-        </td>
+        &nbsp;</td>
     </tr>
     <tr>
         <td class="style14">
@@ -117,7 +130,7 @@
             </asp:Calendar>
         </td>
         <td class="style15">
-            <table class="style1" style="height: 55px; width: 100%">
+            <table class="style1" style="height: 205px; width: 100%">
                 <tr>
                     <td class="style8">
                         <table class="style1" style="width: 117%">
@@ -170,27 +183,55 @@
             </table>
         </td>
     </tr>
-    <tr>
-        <td class="style4">
-            &nbsp;</td>
-        <td>
-            <table class="style1">
-                <tr>
-                    <td class="style19">
-                        &nbsp;</td>
-                    <td>
-                        <asp:Button ID="btnAdd" runat="server" onclick="btnAdd_Click" 
-                            Text="Add Your Stand-up" />
-                    </td>
-                    <td>
-                        &nbsp;</td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-            <asp:SqlDataSource ID="sdsProjects" runat="server" 
-                ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
-                SelectCommand="SELECT [Project], [ProjectID] FROM [tblProjects]" 
-        onselecting="sdsProjects_Selecting"></asp:SqlDataSource>
-            </asp:Content>
+    </table>
+    <table class="style1" style="height: 204px">
+        <tr>
+            <td class="style26">
+                <asp:MultiView ID="MultiView1" runat="server">
+                    <asp:View ID="View1" runat="server">
+                        <table class="style1">
+                            <tr>
+                                <td>
+                                    <asp:Button ID="btnNewProject" runat="server" onclick="btnAddProject_Click" 
+                                        style="text-align: right" Text="New Project" />
+                                </td>
+                                <td>
+                                    &nbsp;</td>
+                                <td>
+                                    <asp:Button ID="btnAdd" runat="server" onclick="btnAdd_Click" 
+                                        Text="Add Your Stand-up" />
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:View>
+                    <asp:View ID="View2" runat="server">
+                        <table class="style1" style="height: 89px">
+                            <tr>
+                                <td class="style31">
+                                    <strong style="text-align: right">New Project</strong></td>
+                                <td class="style32">
+                                    <strong>Name:</strong></td>
+                                <td>
+                                    <asp:TextBox ID="txtNewProject" runat="server" style="margin-left: 0px" 
+                                        Width="736px"></asp:TextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style31">
+                                    <asp:Button ID="btnAddProject" runat="server" onclick="btnAddProject_Click1" 
+                                        Text="Add Project" />
+                                </td>
+                                <td class="style32">
+                                    <strong>Details:</strong></td>
+                                <td>
+                                    <asp:TextBox ID="txtNewProjectDetails" runat="server" Height="42px" 
+                                        TextMode="MultiLine" Width="738px"></asp:TextBox>
+                                </td>
+                            </tr>
+                        </table>
+                    </asp:View>
+                </asp:MultiView>
+            </td>
+        </tr>
+    </table>
+</asp:Content>
