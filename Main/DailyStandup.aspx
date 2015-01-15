@@ -85,9 +85,10 @@
         <td class="style17">
             <asp:SqlDataSource ID="sdsProjects" runat="server" 
                 ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
-                SelectCommand="SELECT [Project] FROM [tblProjects]"></asp:SqlDataSource>
+                SelectCommand="SELECT [Project], [ProjectID] FROM [tblProjects]"></asp:SqlDataSource>
             <asp:DropDownList ID="ddlProjects" runat="server" DataSourceID="sdsProjects" 
-                DataTextField="Project" DataValueField="Project">
+                DataTextField="Project" DataValueField="Project" AutoPostBack="True" 
+                onselectedindexchanged="ddlProjects_SelectedIndexChanged">
             </asp:DropDownList>
         </td>
     </tr>
@@ -164,7 +165,7 @@
                     </td>
                     <td class="style13">
                         <asp:TextBox ID="txtImpediments" runat="server" Height="170px" 
-                            TextMode="MultiLine" Width="200px" Font-Names="Tahoma">I&#39;m impeded by </asp:TextBox>
+                            TextMode="MultiLine" Width="200px" Font-Names="Tahoma">My impediments are </asp:TextBox>
                     </td>
                 </tr>
             </table>

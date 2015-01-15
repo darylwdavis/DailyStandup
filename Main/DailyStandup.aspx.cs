@@ -47,6 +47,20 @@ namespace DWD_DailyStandup.Main
     }
 
 
+
+    protected void ddlProjects_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (!(ddlProjects.Text == "[choose project]"))
+      {
+        AllowStandupEntry(true);
+      }
+      else
+      {
+        AllowStandupEntry(false);
+      }
+    }
+
+
     #endregion    //--------------------------------------------------------------------
 
     private void AddNewStandUp()
@@ -107,12 +121,16 @@ namespace DWD_DailyStandup.Main
           txtYesterday.Text = dt.Rows[0][0].ToString();
           txtToday.Text = dt.Rows[0][1].ToString();
           txtImpediments.Text = dt.Rows[0][2].ToString();
+          Guid ProjectId = new Guid(dt.Rows[0]["ProjectID"].ToString());
+          //ddlProjects.Items =ProjectId ;
         }
         else
         {
           txtYesterday.Text = "Yesterday I ";
           txtToday.Text = "Today I ";
-          txtImpediments.Text = "My impedements are ";
+          txtImpediments.Text = "My impediments are ";
+          ddlProjects.Text = "[choose project]";
+          AllowStandupEntry(false);
         }
       }
     }
@@ -147,6 +165,16 @@ namespace DWD_DailyStandup.Main
       }
 
       return ds;
+    }
+
+
+
+    private void AllowStandupEntry(Boolean Enable)
+    {
+      //Allow data entry only if a valid project has been selected
+        txtYesterday.Enabled = Enable;
+        txtToday.Enabled = Enable;
+        txtImpediments.Enabled = Enable;
     }
 
 
