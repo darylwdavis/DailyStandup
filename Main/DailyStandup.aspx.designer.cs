@@ -13,22 +13,13 @@ namespace DWD_DailyStandup.Main {
     public partial class DailyStandup {
         
         /// <summary>
-        /// btnProject control.
+        /// btnAddProject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnProject;
-        
-        /// <summary>
-        /// sdsProjects control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource sdsProjects;
+        protected global::System.Web.UI.WebControls.Button btnAddProject;
         
         /// <summary>
         /// ddlProjects control.
@@ -92,5 +83,14 @@ namespace DWD_DailyStandup.Main {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAdd;
+        
+        /// <summary>
+        /// sdsProjects control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource sdsProjects;
     }
 }

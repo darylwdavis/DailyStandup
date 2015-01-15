@@ -14,6 +14,11 @@ namespace DWD_DailyStandup.Main
 {
   public partial class DailyStandup : System.Web.UI.Page
   {
+    #region Private Members    //--------------------------------------------------------------------
+    //Set default string if no Project is selected
+    private string mDefaultProjectName = "[choose project]";
+    #endregion                //--------------------------------------------------------------------
+
 
 
     #region Events    //--------------------------------------------------------------------
@@ -24,9 +29,14 @@ namespace DWD_DailyStandup.Main
 
       if (!IsPostBack)
       {
+        //Set Behavior of Projects DropDownList
+        ddlProjects.DataValueField = "ProjectID";
+        ddlProjects.DataTextField = "Project";
+        //Set The Calendar to today
         Calendar1.SelectedDate = DateTime.Now;
         lblDate.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
-        fillGridview(Calendar1.SelectedDate);
+        //Fill the Text Boxes
+        UpdateTextBoxes(Calendar1.SelectedDate);
       }
 
     }
@@ -36,7 +46,7 @@ namespace DWD_DailyStandup.Main
       //Update Date Label
       lblDate.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
       //Update the Standup Page
-      fillGridview(Calendar1.SelectedDate);
+      UpdateTextBoxes(Calendar1.SelectedDate);
 
     }
 
@@ -50,14 +60,8 @@ namespace DWD_DailyStandup.Main
 
     protected void ddlProjects_SelectedIndexChanged(object sender, EventArgs e)
     {
-      if (!(ddlProjects.Text == "[choose project]"))
-      {
-        AllowStandupEntry(true);
-      }
-      else
-      {
-        AllowStandupEntry(false);
-      }
+      CheckForValidProject();
+
     }
 
 
@@ -72,7 +76,7 @@ namespace DWD_DailyStandup.Main
 
         // Setup Connection
         String connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            SqlConnection connection = new SqlConnection(connectionString);
+        SqlConnection connection = new SqlConnection(connectionString);
         //Setu Command
         SqlCommand command = new SqlCommand("dbo.pspInsNewStandup", connection);
         command.CommandType = CommandType.StoredProcedure;
@@ -99,7 +103,7 @@ namespace DWD_DailyStandup.Main
     }
 
 
-    private void fillGridview(DateTime StartingDateDayOfWeek)
+    private void UpdateTextBoxes(DateTime StartingDateDayOfWeek)
     {
 
       // Run the query
@@ -118,18 +122,24 @@ namespace DWD_DailyStandup.Main
         DataTable dt = ds.Tables[0];
         if (dt.Rows.Count > 0)
         {
-          txtYesterday.Text = dt.Rows[0][0].ToString();
-          txtToday.Text = dt.Rows[0][1].ToString();
-          txtImpediments.Text = dt.Rows[0][2].ToString();
-          Guid ProjectId = new Guid(dt.Rows[0]["ProjectID"].ToString());
-          //ddlProjects.Items =ProjectId ;
+          txtYesterday.Text = dt.Rows[0]["Yesterday"].ToString();
+          txtToday.Text = dt.Rows[0]["Today"].ToString();
+          txtImpediments.Text = dt.Rows[0]["Impediments"].ToString();
+
+          //Set the ddl SelectedValue to the Project Guid
+          ddlProjects.SelectedValue = dt.Rows[0]["ProjectID"].ToString();
+
+          //
+          CheckForValidProject();
+
         }
         else
         {
           txtYesterday.Text = "Yesterday I ";
           txtToday.Text = "Today I ";
           txtImpediments.Text = "My impediments are ";
-          ddlProjects.Text = "[choose project]";
+          //Set the ddl SelectedValue Guid by finding by Text
+          ddlProjects.SelectedValue = ddlProjects.Items.FindByText(mDefaultProjectName).Value;
           AllowStandupEntry(false);
         }
       }
@@ -167,14 +177,34 @@ namespace DWD_DailyStandup.Main
       return ds;
     }
 
-
+    private void CheckForValidProject()
+    {
+      if (!(ddlProjects.SelectedItem.Text == mDefaultProjectName))
+      {
+        AllowStandupEntry(true);
+      }
+      else
+      {
+        AllowStandupEntry(false);
+      }
+    }
 
     private void AllowStandupEntry(Boolean Enable)
     {
       //Allow data entry only if a valid project has been selected
-        txtYesterday.Enabled = Enable;
-        txtToday.Enabled = Enable;
-        txtImpediments.Enabled = Enable;
+      txtYesterday.Enabled = Enable;
+      txtToday.Enabled = Enable;
+      txtImpediments.Enabled = Enable;
+    }
+
+    protected void sdsProjects_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
+    {
+
+    }
+
+    protected void btnAddProject_Click(object sender, EventArgs e)
+    {
+
     }
 
 

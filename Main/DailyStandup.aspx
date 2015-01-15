@@ -76,19 +76,18 @@
                     <td class="style18">
                         &nbsp;</td>
                     <td>
-                        <asp:Button ID="btnProject" runat="server" style="text-align: right" 
-                            Text="Project" />
+                        <asp:Button ID="btnAddProject" runat="server" style="text-align: right" 
+                            Text="Add Project" onclick="btnAddProject_Click" />
                     </td>
                 </tr>
             </table>
         </td>
         <td class="style17">
-            <asp:SqlDataSource ID="sdsProjects" runat="server" 
-                ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
-                SelectCommand="SELECT [Project], [ProjectID] FROM [tblProjects]"></asp:SqlDataSource>
             <asp:DropDownList ID="ddlProjects" runat="server" DataSourceID="sdsProjects" 
-                DataTextField="Project" DataValueField="Project" AutoPostBack="True" 
-                onselectedindexchanged="ddlProjects_SelectedIndexChanged">
+                DataTextField="Project" DataValueField="ProjectID" AutoPostBack="True" 
+                onselectedindexchanged="ddlProjects_SelectedIndexChanged" Height="30px" 
+                Width="451px">
+                <asp:ListItem Text="-Select-" Value="" /> 
             </asp:DropDownList>
         </td>
     </tr>
@@ -190,4 +189,8 @@
         </td>
     </tr>
 </table>
-</asp:Content>
+            <asp:SqlDataSource ID="sdsProjects" runat="server" 
+                ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
+                SelectCommand="SELECT [Project], [ProjectID] FROM [tblProjects]" 
+        onselecting="sdsProjects_Selecting"></asp:SqlDataSource>
+            </asp:Content>
