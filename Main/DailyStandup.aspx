@@ -1,5 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DailyStandup.aspx.cs" Inherits="DWD_DailyStandup.Main.DailyStandup" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon"/>
     <style type="text/css">
         .style5
         {
@@ -84,7 +87,7 @@
                     <td class="style18">
             <asp:SqlDataSource ID="sdsProjects" runat="server" 
                 ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
-                SelectCommand="SELECT [Project], [ProjectID] FROM [tblProjects]" 
+                SelectCommand="SELECT [Project], [ProjectID] FROM [tblProjects] ORDER BY [Project]" 
                             onselecting="sdsProjects_Selecting"></asp:SqlDataSource>
                     </td>
                     <td>
@@ -185,7 +188,7 @@
         </td>
     </tr>
     </table>
-    <table class="style1" style="height: 204px">
+    <table class="style1" style="height: 232px">
         <tr>
             <td class="style26">
                 <asp:MultiView ID="MultiView1" runat="server">
@@ -193,7 +196,7 @@
                         <table class="style1">
                             <tr>
                                 <td>
-                                    <asp:Button ID="btnNewProject" runat="server" onclick="btnAddProject_Click" 
+                                    <asp:Button ID="btnNewProject" runat="server" onclick="btnNewProject_Click" 
                                         style="text-align: right" Text="New Project" />
                                 </td>
                                 <td>
@@ -206,7 +209,8 @@
                         </table>
                     </asp:View>
                     <asp:View ID="View2" runat="server">
-                        <table class="style1" style="height: 89px">
+                        <table class="style1" style="border-style: groove; height: 124px" 
+                            frame="border">
                             <tr>
                                 <td class="style31">
                                     <strong style="text-align: right">New Project</strong></td>
@@ -214,20 +218,30 @@
                                     <strong>Name:</strong></td>
                                 <td>
                                     <asp:TextBox ID="txtNewProject" runat="server" style="margin-left: 0px" 
-                                        Width="736px"></asp:TextBox>
+                                        Width="736px" Font-Names="Times New Roman"></asp:TextBox>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="style31">
-                                    <asp:Button ID="btnAddProject" runat="server" onclick="btnAddProject_Click1" 
+                                    <asp:Button ID="btnAddProject" runat="server" onclick="btnAddProject_Click" 
                                         Text="Add Project" />
                                 </td>
                                 <td class="style32">
                                     <strong>Details:</strong></td>
                                 <td>
-                                    <asp:TextBox ID="txtNewProjectDetails" runat="server" Height="42px" 
-                                        TextMode="MultiLine" Width="738px"></asp:TextBox>
+                                    <asp:TextBox ID="txtNewProjectDetails" runat="server" Height="53px" 
+                                        TextMode="MultiLine" Width="738px" Font-Names="Times New Roman"></asp:TextBox>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td class="style31">
+                                    <asp:Button ID="btnCancelAdd" runat="server" onclick="btnCancelAdd_Click" 
+                                        Text="Cancel" />
+                                </td>
+                                <td class="style32">
+                                    &nbsp;</td>
+                                <td>
+                                    &nbsp;</td>
                             </tr>
                         </table>
                     </asp:View>

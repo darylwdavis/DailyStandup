@@ -74,9 +74,25 @@ namespace DWD_DailyStandup.Main
 
       //Fill the Text Boxes
       UpdateTextBoxes(Calendar1.SelectedDate);
-
     }
 
+    protected void btnNewProject_Click(object sender, EventArgs e)
+    {
+      //Add Project Mode
+      MultiView1.ActiveViewIndex = 1;
+    }
+
+    protected void btnAddProject_Click(object sender, EventArgs e)
+    {
+      //Add project to db
+      AddNewProject();
+    }
+
+
+    protected void btnCancelAdd_Click(object sender, EventArgs e)
+    {
+      ClearAddProject();
+    }
     #endregion    //--------------------------------------------------------------------
 
     private void AddNewStandUp()
@@ -89,7 +105,7 @@ namespace DWD_DailyStandup.Main
         // Setup Connection
         String connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         SqlConnection connection = new SqlConnection(connectionString);
-        //Setu Command
+        //Setup Command
         SqlCommand command = new SqlCommand("dbo.pspInsNewStandup", connection);
         command.CommandType = CommandType.StoredProcedure;
 
@@ -217,22 +233,59 @@ namespace DWD_DailyStandup.Main
 
     }
 
-    protected void btnAddProject_Click(object sender, EventArgs e)
-    {
-      //Add Project Mode
-      MultiView1.ActiveViewIndex = 1;
 
+
+    private void AddNewProject()
+    {
+
+      try
+      {
+        //Calls the insert new Project Stored Procedure
+
+        // Setup Connection
+        String connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        SqlConnection connection = new SqlConnection(connectionString);
+        //Setup Command
+        SqlCommand command = new SqlCommand("dbo.pspInsNewProject", connection);
+        command.CommandType = CommandType.StoredProcedure;
+
+        // Add the parameters to Pass into SP
+        command.Parameters.AddWithValue("@ProjectName", txtNewProject.Text);
+        command.Parameters.AddWithValue("@Details", txtNewProjectDetails.Text);
+
+
+        // Connect to the database and run the Insert.
+        using (connection)
+        {
+          connection.Open();
+          command.ExecuteNonQuery();
+        }
+
+        //Re-bind the ddlProjects
+        ddlProjects.DataBind();
+
+        //Data Saved, clear the txt boxes
+        ClearAddProject();
+
+      }
+      catch (Exception ex)
+      {
+
+        Response.Write(ex);
+      }
     }
 
-    protected void btnAddProject_Click1(object sender, EventArgs e)
+    private void ClearAddProject()
     {
-      //Add project to db
-      
+      //Clear the txt boxes
+      txtNewProject.Text = "";
+      txtNewProjectDetails.Text = "";
 
       //Return to Normal Mode
       MultiView1.ActiveViewIndex = 0;
-
     }
+
+
 
 
   }
