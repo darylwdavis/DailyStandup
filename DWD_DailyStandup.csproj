@@ -32,6 +32,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -60,6 +64,7 @@
     <Content Include="App_Data\DailyStandup_log.ldf">
       <DependentUpon>DailyStandup.mdf</DependentUpon>
     </Content>
+    <Content Include="favicon.ico" />
     <Content Include="Main\DailyStandup.aspx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
@@ -123,6 +128,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Main\clsDateTimeSerice.cs" />
     <Compile Include="Main\DailyStandup.aspx.cs">
       <DependentUpon>DailyStandup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -154,8 +160,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>61807</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost/DWD_DailyStandup</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

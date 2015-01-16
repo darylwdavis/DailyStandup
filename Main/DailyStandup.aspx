@@ -73,8 +73,8 @@
         {
             height: 21px;
         }
-        </style>
-</asp:Content>
+        </style>  
+</asp:Content>   
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <table class="style1">
     <tr>
@@ -97,11 +97,12 @@
                 Text="Project"></asp:Label>
 &nbsp;
             <asp:DropDownList ID="ddlProjects" runat="server" DataSourceID="sdsProjects" 
-                DataTextField="Project" DataValueField="ProjectID" AutoPostBack="True" 
+                DataTextField="Project" DataValueField="ProjectID" AutoPostBack="True"
+                 onDataBound="ddlProjects_DataBound"
                 onselectedindexchanged="ddlProjects_SelectedIndexChanged" Height="30px" 
                 Width="451px">
-                <asp:ListItem Text="-Select-" Value="" /> 
             </asp:DropDownList>
+            
         &nbsp;</td>
     </tr>
     <tr>

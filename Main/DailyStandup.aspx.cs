@@ -35,11 +35,12 @@ namespace DWD_DailyStandup.Main
         //Set The Calendar to today
         Calendar1.SelectedDate = DateTime.Now;
         lblDate.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
-        //Fill the Text Boxes
-        UpdateTextBoxes(Calendar1.SelectedDate);
+
 
         //Set the New Project MultiView to default view
         MultiView1.ActiveViewIndex = 0;
+
+        this.Page.Header.Title = "Daily Stand-Up";
       }
 
     }
@@ -68,6 +69,14 @@ namespace DWD_DailyStandup.Main
     }
 
 
+    protected void ddlProjects_DataBound(object sender, EventArgs e)
+    {
+
+      //Fill the Text Boxes
+      UpdateTextBoxes(Calendar1.SelectedDate);
+
+    }
+
     #endregion    //--------------------------------------------------------------------
 
     private void AddNewStandUp()
@@ -89,7 +98,7 @@ namespace DWD_DailyStandup.Main
         command.Parameters.AddWithValue("@Yesterday", txtYesterday.Text);
         command.Parameters.AddWithValue("@Today", txtToday.Text);
         command.Parameters.AddWithValue("@Impediments", txtImpediments.Text);
-        command.Parameters.AddWithValue("@ProjectName", ddlProjects.Text);
+        command.Parameters.AddWithValue("@ProjectID", ddlProjects.SelectedValue);
 
         // Connect to the database and run the Insert.
         using (connection)
@@ -142,7 +151,10 @@ namespace DWD_DailyStandup.Main
           txtToday.Text = "Today I ";
           txtImpediments.Text = "My impediments are ";
           //Set the ddl SelectedValue Guid by finding by Text
-          ddlProjects.SelectedValue = ddlProjects.Items.FindByText(mDefaultProjectName).Value;
+          if (ddlProjects.Items.Count > 1)
+          {
+            ddlProjects.SelectedValue = ddlProjects.Items.FindByText(mDefaultProjectName).Value;
+          }
           AllowStandupEntry(false);
         }
       }
