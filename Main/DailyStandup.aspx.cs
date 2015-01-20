@@ -7,16 +7,25 @@ using System.Web.UI.WebControls;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
-
+using System.Data.SqlTypes;
 
 
 namespace DWD_DailyStandup.Main
 {
   public partial class DailyStandup : System.Web.UI.Page
   {
+
     #region Private Members    //--------------------------------------------------------------------
     //Set default string if no Project is selected
     private string mDefaultProjectName = "[choose project]";
+
+    const string VM = "View Mode";
+    const string EM = "Edit Mode";
+
+
+
+    private bool ProjectModeEdit = false;
+
     #endregion                //--------------------------------------------------------------------
 
 
@@ -29,6 +38,8 @@ namespace DWD_DailyStandup.Main
 
       if (!IsPostBack)
       {
+        //Configure the sql DataSource obj for the Drop Down List
+        SetupProjectsList();
         //Set Behavior of Projects DropDownList
         ddlProjects.DataValueField = "ProjectID";
         ddlProjects.DataTextField = "Project";
@@ -64,6 +75,9 @@ namespace DWD_DailyStandup.Main
 
     protected void ddlProjects_SelectedIndexChanged(object sender, EventArgs e)
     {
+      //Set Standup to default
+      ClearStandupBoxes();
+      //Check for Non-default project
       CheckForValidProject();
 
     }
@@ -93,7 +107,59 @@ namespace DWD_DailyStandup.Main
     {
       ClearAddProject();
     }
+
+    protected void btnMode_Click(object sender, EventArgs e)
+    {
+      ChangeMode(btnMode.Text);
+
+    }
+
+
     #endregion    //--------------------------------------------------------------------
+
+
+    private void SetupProjectsList()
+    {
+      //Connects the dropdown list for all projects
+
+      // Setup Connection
+      String connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+      SqlConnection connection = new SqlConnection(connectionString);
+
+      //remove existing datasource
+      sdsProjects.SelectCommand = null;
+
+      //Setup Command
+      SqlCommand command = new SqlCommand("dbo.pspGetAllProjects", connection);
+      command.CommandType = CommandType.StoredProcedure;
+      sdsProjects.SelectCommandType = SqlDataSourceCommandType.StoredProcedure;
+      sdsProjects.SelectCommand = command.CommandText;
+
+    }
+
+    private void SetupProjectsList(DateTime Date)
+    {
+      //Connects the dropdown list for all projects on Date
+      //ddlProjects.Items.Clear();
+
+      // Setup Connection
+      String connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+      SqlConnection connection = new SqlConnection(connectionString);
+
+      //remove existing datasource
+      sdsProjects.SelectCommand = null;
+
+      //Setup Command
+      SqlCommand command = new SqlCommand("dbo.pspGetAllProjectsByStandupDate", connection);
+      command.CommandType = CommandType.StoredProcedure;
+     
+      // Add the parameters to Pass into SP
+      sdsProjects.SelectParameters.Add("date", Date.ToString());    //Not SqldataSource adds the @ parameter name, unlike the sqlcommand
+
+      //Hook the datasource to the stored proc
+      sdsProjects.SelectCommandType = SqlDataSourceCommandType.StoredProcedure;
+      sdsProjects.SelectCommand = command.CommandText;
+    }
 
     private void AddNewStandUp()
     {
@@ -131,15 +197,15 @@ namespace DWD_DailyStandup.Main
     }
 
 
-    private void UpdateTextBoxes(DateTime StartingDateDayOfWeek)
+    private void UpdateTextBoxes(DateTime SelectedDate)
     {
 
       // Run the query
       SqlParameter p1 = new SqlParameter();
       SqlParameter p2 = new SqlParameter();
       //Create Parameters to Pass into Stored Procedure
-      p1.Value = StartingDateDayOfWeek;
-      p2.Value = StartingDateDayOfWeek.AddDays(1);
+      p1.Value = SelectedDate;
+      p2.Value = SelectedDate.AddDays(1);
       //Run the stored procedure storing result in new data set
       //The procedure only uses Date, so the time is 12AM for that day
       DataSet ds = GetDataWithSP("dbo.pspGetDayInfo", p1, p2);
@@ -150,12 +216,20 @@ namespace DWD_DailyStandup.Main
         DataTable dt = ds.Tables[0];
         if (dt.Rows.Count > 0)
         {
+
           txtYesterday.Text = dt.Rows[0]["Yesterday"].ToString();
           txtToday.Text = dt.Rows[0]["Today"].ToString();
           txtImpediments.Text = dt.Rows[0]["Impediments"].ToString();
 
+          if ((dt.Rows.Count > 1) && !(ProjectModeEdit))
+          {
+            SetMode(true);
+            //Rebuild the Projects dd List for the selected date
+            SetupProjectsList(SelectedDate);
+          }
+
           //Set the ddl SelectedValue to the Project Guid
-          ddlProjects.SelectedValue = dt.Rows[0]["ProjectID"].ToString();
+          ddlProjects.SelectedValue = dt.Rows[0]["ProjectID"].ToString();   //View All: dt.Rows[0].ItemArray
 
           //
           CheckForValidProject();
@@ -163,9 +237,7 @@ namespace DWD_DailyStandup.Main
         }
         else
         {
-          txtYesterday.Text = "Yesterday I ";
-          txtToday.Text = "Today I ";
-          txtImpediments.Text = "My impediments are ";
+          ClearStandupBoxes();
           //Set the ddl SelectedValue Guid by finding by Text
           if (ddlProjects.Items.Count > 1)
           {
@@ -175,6 +247,16 @@ namespace DWD_DailyStandup.Main
         }
       }
     }
+
+    private void ClearStandupBoxes()
+    {
+      txtYesterday.Text = "Yesterday I ";
+      txtToday.Text = "Today I ";
+      txtImpediments.Text = "My impediments are ";
+
+    }
+
+
 
     DataSet GetDataWithSP(String sp, SqlParameter p1, SqlParameter p2)
     {
@@ -210,6 +292,8 @@ namespace DWD_DailyStandup.Main
 
     private void CheckForValidProject()
     {
+
+      //Check for Default Project
       if (!(ddlProjects.SelectedItem.Text == mDefaultProjectName))
       {
         AllowStandupEntry(true);
@@ -285,6 +369,42 @@ namespace DWD_DailyStandup.Main
       MultiView1.ActiveViewIndex = 0;
     }
 
+
+
+
+
+
+    private void ChangeMode(string ModeName)
+    {
+      switch (ModeName)
+      {
+        case VM:
+          //Change to Edit Mode
+          ProjectModeEdit = true;
+          btnMode.Text = EM;
+          break;
+        case EM:
+          //Change to View Mode
+          ProjectModeEdit = false;
+          btnMode.Text = VM;
+          break;
+
+      }
+    }
+
+
+    private void SetMode(bool EditMode)
+    {
+      ProjectModeEdit = EditMode;
+      if (EditMode == true)
+      {
+        btnMode.Text = EM;
+      }
+      else
+      {
+        btnMode.Text = VM;
+      }
+    }
 
 
 

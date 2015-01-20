@@ -106,7 +106,9 @@
                 Width="451px">
             </asp:DropDownList>
             
-        &nbsp;</td>
+        &nbsp;<asp:Button ID="btnMode" runat="server" CommandName="View Mode" 
+                onclick="btnMode_Click" Text="View Mode" />
+        </td>
     </tr>
     <tr>
         <td class="style14">
