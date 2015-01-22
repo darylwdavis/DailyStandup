@@ -72,9 +72,21 @@
         {
             width: 57px;
         }
-        .style33
+        .style34
         {
-            height: 21px;
+            width: 100%;
+        }
+        .style35
+        {
+            width: 514px;
+        }
+        .style36
+        {
+            width: 98px;
+        }
+        .style37
+        {
+            width: 47px;
         }
         </style>  
 </asp:Content>   
@@ -96,18 +108,31 @@
             </table>
         </td>
         <td class="style17">
-            &nbsp;<asp:Label ID="lblProjectDesc" runat="server" Font-Size="Large" 
+            <table class="style34">
+                <tr>
+                    <td class="style35">
+                        <asp:Label ID="lblProjectDesc" runat="server" Font-Size="Large" 
                 Text="Project"></asp:Label>
-&nbsp;
-            <asp:DropDownList ID="ddlProjects" runat="server" DataSourceID="sdsProjects" 
+&nbsp;<asp:DropDownList ID="ddlProjects" runat="server" DataSourceID="sdsProjects" 
                 DataTextField="Project" DataValueField="ProjectID" AutoPostBack="True"
                  onDataBound="ddlProjects_DataBound"
                 onselectedindexchanged="ddlProjects_SelectedIndexChanged" Height="30px" 
                 Width="451px">
             </asp:DropDownList>
             
-        &nbsp;<asp:Button ID="btnMode" runat="server" CommandName="View Mode" 
+                    </td>
+                    <td class="style36">
+                        <asp:Button ID="btnMode" runat="server" CommandName="View Mode" 
                 onclick="btnMode_Click" Text="View Mode" />
+                    </td>
+                    <td class="style37">
+                        <asp:Button ID="btnNextProject" runat="server" onclick="btnNextProject_Click" 
+                            Text="&gt;&gt;" />
+                    </td>
+                    <td>
+                        &nbsp;</td>
+                </tr>
+            </table>
         </td>
     </tr>
     <tr>
